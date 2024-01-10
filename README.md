@@ -10,7 +10,7 @@ Complete privacy. Contains no analytics. Zero dependencies.
 
 [![Chrome Web Store](screenshots/chrome_web_store_button.png?raw=true "Chrome Web Store")](https://linktochromestorehere)
 
-[![Screenshot](screenshots/screenshot-new.png?raw=true "Screenshot")](https://linktochromestorehere)
+[![Screenshot](screenshots/screenshot.png?raw=true "Screenshot")](https://linktochromestorehere)
 
 ## Notices
 This extension is based on [Meetings Page Autocloser For Zoom](https://github.com/ChromeAdmin/meetings-page-auto-closer-for-zoom)
