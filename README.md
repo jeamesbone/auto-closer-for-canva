@@ -13,7 +13,7 @@ Complete privacy. Contains no analytics. Zero dependencies.
 [![Screenshot](screenshots/screenshot-new.png?raw=true "Screenshot")](https://chrome.google.com/webstore/detail/meetings-page-auto-closer/pbgidoglkjhfgjhalbbiiahdlokjcplb)
 
 ## Notices
-This extension is a modified from [Meetings Page Autocloser For Zoom](https://github.com/ChromeAdmin/meetings-page-auto-closer-for-zoom)
+This extension is based on [Meetings Page Autocloser For Zoom](https://github.com/ChromeAdmin/meetings-page-auto-closer-for-zoom)
 
 This extension is not affliated, authorized by, endorsed by, or produced by Canva.
 <br/>All trademarks are the property of their respective holders.
