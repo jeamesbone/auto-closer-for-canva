@@ -45,15 +45,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const lastActiveTabId = lastActiveTabIdsList[lastActiveTabIdsList.length - 1];
     const activeBeforeLastTabId = lastActiveTabIdsList[lastActiveTabIdsList.length - 2];
     if (tabId === lastActiveTabId) {
-      // This is a case where the zoom tab we are about to close 
+      // This is a case where the canva tab we are about to close 
       // is the lastActiveTabId for this window. So we will change
       // the focus to the tab previously active in this window.
       focusTab(activeBeforeLastTabId);
-      console.log('MPACFZ: Recovered the active tab before zoom.');
+      console.log('ACFC: Recovered the active tab before zoom.');
     }
   }
   
   chrome.tabs.remove(tabId);
 });
 
-console.log(`MPACFZ: meetings-page-auto-closer-for-zoom loaded.`)
+console.log(`ACFC: auto-closer-for-canva loaded.`)
