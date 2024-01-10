@@ -1,4 +1,4 @@
-# meetings-page-auto-closer-for-zoom
+# auto-closer-for-canva
 <!-- TODO://PutChromeWebstoreLinkHere and make ^ clickable -->
 # Privacy Policy
 

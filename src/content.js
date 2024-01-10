@@ -1,44 +1,21 @@
 const intervalRateMs = 1000;
-const maxCountdownStartTimeMs = 35 * 1000;
-const minCountdownStartTimeMs = 5 * 1000;
 
-const cssClassName_Wrapper = `meetings-page-auto-closer-for-zoom-wrapper`;
-const cssClassName_MainPopOver = `meetings-page-auto-closer-for-zoom-main-pop-over`;
-const cssClassName_CountdownText = `meetings-page-auto-closer-for-zoom-countdown-text`;
-const cssClassName_CloseNowBtn = `meetings-page-auto-closer-for-zoom-close-now-btn`;
-const cssClassName_StopLink = `meetings-page-auto-closer-for-zoom-stop-link`;
+const cssClassName_Wrapper = `auto-closer-for-canva-wrapper`;
+const cssClassName_MainPopOver = `auto-closer-for-canva-main-pop-over`;
+const cssClassName_CountdownText = `auto-closer-for-canva-countdown-text`;
+const cssClassName_CloseNowBtn = `auto-closer-for-canva-close-now-btn`;
+const cssClassName_StopLink = `auto-closer-for-canva-stop-link`;
 
-const cssClassName_SettingsMenu = `meetings-page-auto-closer-for-zoom-settings-menu`;
-const cssClassName_SettingsOption = `meetings-page-auto-closer-for-zoom-settings-option`;
-
-const localStorageKey_CountdownStartTimeMs = `b9d55053-5a15-4b65-98ce-73711e1d83f9`;
+const cssClassName_SettingsMenu = `auto-closer-for-canva-settings-menu`;
+const cssClassName_SettingsOption = `auto-closer-for-canva-settings-option`;
 
 function log(text) {
-  console.log(`MPACFZ: ${text}`);
+  console.log(`ACFC: ${text}`);
 }
 
 log('loaded...');
 
-let timeTillCloseMs = getCountdownStartTimeMs();
-
-function getCountdownStartTimeMs() {
-  const defaultStartTimeMs = 21 * 1000;
-  let startTimeMs = defaultStartTimeMs;
-  try {
-    startTimeMs = Number(localStorage.getItem(localStorageKey_CountdownStartTimeMs));
-  } catch (e) {
-    console.error(e);
-  }
-  if (!startTimeMs || startTimeMs <= minCountdownStartTimeMs || startTimeMs > maxCountdownStartTimeMs) {
-    setCountdownStartTimeMs(defaultStartTimeMs); // Overwrite to self-correct
-    startTimeMs = defaultStartTimeMs;
-  }
-  return startTimeMs;
-}
-
-function setCountdownStartTimeMs(startTimeMs) {
-  localStorage.setItem(localStorageKey_CountdownStartTimeMs, startTimeMs);
-}
+let timeTillCloseMs = 5 * 1000;
 
 function getWrapperEl() {
   return document.documentElement.querySelector(`.${cssClassName_Wrapper}`);
@@ -46,7 +23,7 @@ function getWrapperEl() {
 
 function countdownWithText(countdownTimeMs) {
   if (false) {//Used for freezing the countdown to debugging styling
-    countdownTimeMs = getCountdownStartTimeMs();
+    countdownTimeMs = timeTillCloseMs;
     clearInterval(intervalId);
   }
 
@@ -74,107 +51,19 @@ function countdownWithText(countdownTimeMs) {
       clearInterval(intervalId);
       wrapperEl.remove();
     };
-
-    injectAndUpdateSettingsMenu();
   }
 
   const countdownEl = wrapperEl.querySelector(`.${cssClassName_CountdownText}`);
   countdownEl.innerText = `Closing page in ${Math.round(countdownTimeMs / 1000)} seconds`;
 }
 
-function injectAndUpdateSettingsMenu() {
-  const incrementalSec = 5.0;
-  const trueCountdownStartTimeSec = Math.round(getCountdownStartTimeMs() / incrementalSec / 1000.0) * incrementalSec;
-
-  const optionsList = [];
-  const decrementValSec = trueCountdownStartTimeSec - incrementalSec;
-  const incrementValSec = trueCountdownStartTimeSec + incrementalSec;
-  if (decrementValSec * 1000 >= minCountdownStartTimeMs) {
-    optionsList.push(decrementValSec);
-  }
-  if (incrementValSec * 1000 < maxCountdownStartTimeMs) {
-    optionsList.push(incrementValSec);
-  }
-  if (!optionsList) {
-    log('no options');
-    return;
-  }
-  const wrapperEl = getWrapperEl();
-  wrapperEl.querySelector(`.${cssClassName_SettingsMenu}`)?.remove();
-
-  const settingsEl = document.createElement('div');
-  settingsEl.classList.add(cssClassName_SettingsMenu);
-  settingsEl.innerHTML = `
-  ${trueCountdownStartTimeSec} seconds not your speed?  Try 
-  <a class='${cssClassName_SettingsOption}'>${optionsList[0]}s</a>
-  `;
-  if (optionsList.length > 1) {
-    settingsEl.innerHTML += `
-    or
-    <a class='${cssClassName_SettingsOption}'>${optionsList[1]}s</a>
-    `;
-  }
-  const optionsElList = settingsEl.querySelectorAll(`.${cssClassName_SettingsOption}`);
-  for (let i = 0; i < optionsElList.length; i++) {
-    const optionEl = optionsElList[i];
-    const op = optionsList[i];
-    optionEl.onclick = () => {
-      log(`New option selected: ${op}`);
-      const ms = (op + 1) * 1000;
-      timeTillCloseMs = ms;
-      setCountdownStartTimeMs(ms);
-      injectAndUpdateSettingsMenu();
-    };
-
-  }
-  wrapperEl.appendChild(settingsEl);
-}
-
 function getUrl() {
   return new URL(window.location.href);
 }
 
-function isWebClientLeave() {
-  const url = getUrl();
-  if (url.pathname && url.pathname.startsWith('/wc/leave')) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-function isPostAttendee() {
-  const url = getUrl();
-  if (url.pathname && url.pathname.startsWith('/postattendee')) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-function isMeetingStatusSuccess() {
-  if (window.location.href.toLowerCase().includes('success')) {
-    return true;
-  }
-
-  return false;
-}
-
-function isPageTextLikeMeetingLaunch() {
+function isPageTextLikeDesktopAppOpened() {
   const pageText = document?.body?.innerText?.toLowerCase() || '';
-  if (pageText.includes('click open zoom.')) {
-    return true;
-  }
-  if (pageText.includes('click launch meeting below')) {
-    return true;
-  }
-  if (pageText.includes('having issues with zoom')) {
-    return true;
-  }
-  if (pageText.includes('meeting has been launched')) {
-    return true;
-  }
-  if (pageText.includes('having issues with zoom')) {
+  if (pageText.includes('opening in the desktop app')) {
     return true;
   }
   return false;
@@ -182,9 +71,9 @@ function isPageTextLikeMeetingLaunch() {
 
 function countDownToClose() {
   timeTillCloseMs -= intervalRateMs;
-  log(`TimeMs left: ${timeTillCloseMs} isPageText=${isPageTextLikeMeetingLaunch()} isSuccess=${isMeetingStatusSuccess()} isPostAttendee=${isPostAttendee()} isWebClientLeave=${isWebClientLeave()}`);
+  log(`TimeMs left: ${timeTillCloseMs} isDesktopAppOpened=${isPageTextLikeDesktopAppOpened()}`);
 
-  if (isPageTextLikeMeetingLaunch() || isMeetingStatusSuccess() || isPostAttendee() || isWebClientLeave()) {
+  if (isPageTextLikeDesktopAppOpened()) {
     log(`All checks good to auto close`);
   } else {
     timeTillCloseMs += intervalRateMs; // Put back the time
