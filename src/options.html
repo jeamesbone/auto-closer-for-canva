@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                padding: 12px;
+                min-width: 250px;
+                width:fit-content;
+                margin:0 auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                font-size: medium;
+                font-family: 'Verdana';
+            }
+
+            #status {
+                font-size: small;
+                display: none;
+            }
+
+            #delay {
+                line-height: 20px;
+                font-size: medium;
+            }
+
+            #save {
+                height: 32px;
+                font-size: medium;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <label>
+            Delay before closing:
+        </label>
+
+        <div>
+            <input type="number" id="delay" value="5" min="0" max="60" /> seconds
+        </div>
+
+        <button id="save">Save</button>
+
+        <div id="status">Delay saved.</div>
+
+        <script src="options.js"></script>
+    </body>
+</html>
